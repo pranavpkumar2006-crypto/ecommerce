@@ -1,0 +1,19 @@
+step 1: Initialise Git in your Project Folder:git init
+setp 2: Add all FIles : git add .
+setp 3: Commit YOur files: git command -m "Initial commit"
+setp 4: Create a Repository on GIthub
+
+
+Go to:
+  Github
+
+
+Click New Repository
+Give a name (eg. Ecommerce-django)
+CLick Create Repository
+
+step 5: Connect Local Repo to Github : git remote add origin https://github.com/yourusername/ecommerce-django.git
+
+setp 6: Push Your code:
+git branch -M main
+git push -u origin main
