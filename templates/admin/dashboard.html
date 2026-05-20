@@ -1,0 +1,10 @@
+{% extends 'admin/base_site.html' %}
+{% block content %}
+<style>.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:20px 0}.tile{background:#fff;border:1px solid #ddd;border-radius:8px;padding:18px}.tile strong{font-size:26px;display:block}.table{width:100%;border-collapse:collapse}.table td,.table th{border-bottom:1px solid #eee;padding:10px;text-align:left}</style>
+<h1>Store analytics</h1>
+<div class="dash"><div class="tile"><span>Revenue</span><strong>Rs. {{ revenue }}</strong></div><div class="tile"><span>Orders</span><strong>{{ orders }}</strong></div><div class="tile"><span>Products</span><strong>{{ products }}</strong></div></div>
+<h2>Recent orders</h2>
+<table class="table"><tr><th>Order</th><th>User</th><th>Status</th><th>Total</th></tr>{% for order in latest_orders %}<tr><td>{{ order.order_number }}</td><td>{{ order.user }}</td><td>{{ order.status }}</td><td>Rs. {{ order.grand_total }}</td></tr>{% endfor %}</table>
+<h2>Status mix</h2>
+<div class="dash">{% for item in status_counts %}<div class="tile"><span>{{ item.status }}</span><strong>{{ item.total }}</strong></div>{% endfor %}</div>
+{% endblock %}
