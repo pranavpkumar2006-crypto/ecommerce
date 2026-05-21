@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-dev-key-change-me')
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='django-insecure-dev-key-change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', '1') == '1'
+DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1,testserver', cast=Csv())
 
 
 # Application definition
@@ -82,16 +83,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = config('DATABASE_URL', default='')
 if DATABASE_URL:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRES_DB', 'ecommerce'),
-            'USER': os.getenv('POSTGRES_USER', 'postgres'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-            'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+            'NAME': config('POSTGRES_DB', default='ecommerce'),
+            'USER': config('POSTGRES_USER', default='postgres'),
+            'PASSWORD': config('POSTGRES_PASSWORD', default=''),
+            'HOST': config('POSTGRES_HOST', default='localhost'),
+            'PORT': config('POSTGRES_PORT', default='5432'),
         }
     }
 else:
@@ -144,13 +145,13 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'home'
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'store@example.com')
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='store@example.com')
 
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
-RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
-RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
+STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY', default='')
+RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticatedOrReadOnly'],
@@ -164,8 +165,14 @@ REST_FRAMEWORK = {
 
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=0, cast=int)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=False, cast=bool)
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default=False, cast=bool)
 SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=not DEBUG, cast=bool)
 CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=not DEBUG, cast=bool)
 X_FRAME_OPTIONS = 'DENY'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -71,7 +71,32 @@
 </div>
 {% endif %}
 <main>{% block content %}{% endblock %}</main>
-<div class="chat-widget"><button><i class="bi bi-chat-dots-fill"></i></button><span>Need help?</span></div>
+<div class="chat-assistant" id="chat-assistant">
+  <section class="chat-panel" id="chat-panel" aria-label="Offline support chatbot" aria-hidden="true">
+    <div class="chat-panel-header">
+      <div>
+        <span class="chat-status"><i class="bi bi-circle-fill"></i> Offline assistant</span>
+        <h6>CommercePro Help</h6>
+      </div>
+      <button class="chat-close" type="button" id="chat-close" aria-label="Close chat"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+    <div class="chat-quick-replies" aria-label="Common help topics">
+      <button type="button" data-chat-prompt="Track my order">Track order</button>
+      <button type="button" data-chat-prompt="Shipping details">Shipping</button>
+      <button type="button" data-chat-prompt="Return policy">Returns</button>
+      <button type="button" data-chat-prompt="Payment options">Payment</button>
+    </div>
+    <form class="chat-form" id="chat-form">
+      <input id="chat-input" autocomplete="off" placeholder="Ask about orders, returns, payments..." aria-label="Type your question">
+      <button type="submit" aria-label="Send message"><i class="bi bi-send-fill"></i></button>
+    </form>
+  </section>
+  <div class="chat-widget">
+    <button type="button" id="chat-toggle" aria-controls="chat-panel" aria-expanded="false"><i class="bi bi-chat-dots-fill"></i></button>
+    <span>Need help?</span>
+  </div>
+</div>
 <footer class="premium-footer text-white pt-5 pb-4 mt-5">
   <div class="container">
     <div class="footer-newsletter">
